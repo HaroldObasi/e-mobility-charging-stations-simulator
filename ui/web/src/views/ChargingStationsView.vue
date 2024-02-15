@@ -17,17 +17,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
+import { getCurrentInstance, onMounted, reactive } from 'vue'
 import CSTable from '@/components/charging-stations/CSTable.vue'
 import type { ChargingStationData } from '@/types'
 import Container from '@/components/Container.vue'
 import ReloadButton from '@/components/buttons/ReloadButton.vue'
-import { UIClient } from '@/composables/UIClient'
 
-const UIClientInstance = UIClient.getInstance()
+const UIClient = getCurrentInstance()?.appContext.config.globalProperties.$UIClient
 
 onMounted(() => {
-  UIClientInstance.registerWSonOpenListener(load)
+  UIClient.registerWSonOpenListener(load)
 })
 
 type State = {
@@ -43,19 +42,19 @@ const state: State = reactive({
 })
 
 async function load(): Promise<void> {
-  if (state.isLoading === true) return
-  state.isLoading = true
-  const listChargingStationsPayload = await UIClientInstance.listChargingStations()
-  state.chargingStations =
-    listChargingStationsPayload.chargingStations as unknown as ChargingStationData[]
-  state.isLoading = false
+  if (state.isLoading === false) {
+    state.isLoading = true
+    state.chargingStations = (await UIClient.listChargingStations())
+      .chargingStations as ChargingStationData[]
+    state.isLoading = false
+  }
 }
 
 function startSimulator(): void {
-  UIClientInstance.startSimulator()
+  UIClient.startSimulator()
 }
 function stopSimulator(): void {
-  UIClientInstance.stopSimulator()
+  UIClient.stopSimulator()
 }
 </script>
 

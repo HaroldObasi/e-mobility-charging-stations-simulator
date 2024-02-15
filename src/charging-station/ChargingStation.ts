@@ -8,7 +8,7 @@ import { URL } from 'node:url'
 import { parentPort } from 'node:worker_threads'
 
 import { millisecondsToSeconds, secondsToMilliseconds } from 'date-fns'
-import merge from 'just-merge'
+import { mergeDeepRight } from 'rambda'
 import { type RawData, WebSocket } from 'ws'
 
 import { AutomaticTransactionGenerator } from './AutomaticTransactionGenerator.js'
@@ -88,7 +88,6 @@ import {
   FirmwareStatus,
   type FirmwareStatusNotificationRequest,
   type FirmwareStatusNotificationResponse,
-  type FirmwareUpgrade,
   type HeartbeatRequest,
   type HeartbeatResponse,
   type IncomingRequest,
@@ -1199,7 +1198,7 @@ export class ChargingStation extends EventEmitter {
         } does not match firmware version pattern '${stationInfo.firmwareVersionPattern}'`
       )
     }
-    stationInfo.firmwareUpgrade = merge<FirmwareUpgrade>(
+    stationInfo.firmwareUpgrade = mergeDeepRight(
       {
         versionUpgrade: {
           step: 1
@@ -1223,6 +1222,7 @@ export class ChargingStation extends EventEmitter {
       stationInfo = this.getConfigurationFromFile()?.stationInfo
       if (stationInfo != null) {
         delete stationInfo.infoHash
+        delete (stationInfo as ChargingStationTemplate).numberOfConnectors
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (stationInfo.templateIndex == null) {
           stationInfo.templateIndex = this.index
@@ -1730,7 +1730,7 @@ export class ChargingStation extends EventEmitter {
         } else {
           delete configurationData.configurationKey
         }
-        configurationData = merge<ChargingStationConfiguration>(
+        configurationData = mergeDeepRight(
           configurationData,
           buildChargingStationAutomaticTransactionGeneratorConfiguration(this)
         )

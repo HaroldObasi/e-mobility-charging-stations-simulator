@@ -1,11 +1,19 @@
-export type BaseConfig = {
-  uiServer: UIServerConfig
+import type { AuthenticationType, Protocol, ProtocolVersion } from './UIProtocol'
+
+export type ConfigurationData = {
+  uiServer: UIServerConfigurationSection
 }
 
-type UIServerConfig = {
+type UIServerConfigurationSection = {
   host: string
   port: number
-  protocol: string
-  username?: string
-  password?: string
+  secure?: boolean
+  protocol: Protocol
+  version: ProtocolVersion
+  authentication?: {
+    enabled: boolean
+    type: AuthenticationType
+    username?: string
+    password?: string
+  }
 }

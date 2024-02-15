@@ -3,10 +3,14 @@ export type {
   ChargingStationInfo,
   ConnectorStatus
 } from './ChargingStationType'
-export type { BaseConfig } from './ConfigurationType'
+export type { ConfigurationData } from './ConfigurationType'
 export {
+  ApplicationProtocol,
+  AuthenticationType,
   ProcedureName,
+  Protocol,
   type ProtocolResponse,
+  ProtocolVersion,
   type RequestPayload,
   type ResponsePayload,
   ResponseStatus

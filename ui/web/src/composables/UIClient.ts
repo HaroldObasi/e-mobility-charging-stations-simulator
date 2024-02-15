@@ -1,11 +1,12 @@
 import {
+  ApplicationProtocol,
+  type ConfigurationData,
   ProcedureName,
   type ProtocolResponse,
   type RequestPayload,
   type ResponsePayload,
   ResponseStatus
 } from '@/types'
-import config from '@/assets/config'
 
 type ResponseHandler = {
   procedureName: ProcedureName
@@ -19,14 +20,14 @@ export class UIClient {
   private ws!: WebSocket
   private responseHandlers: Map<string, ResponseHandler>
 
-  private constructor() {
+  private constructor(private configuration: ConfigurationData) {
     this.openWS()
     this.responseHandlers = new Map<string, ResponseHandler>()
   }
 
-  public static getInstance() {
+  public static getInstance(configuration: ConfigurationData) {
     if (UIClient.instance === null) {
-      UIClient.instance = new UIClient()
+      UIClient.instance = new UIClient(configuration)
     }
     return UIClient.instance
   }
@@ -111,8 +112,8 @@ export class UIClient {
 
   private openWS(): void {
     this.ws = new WebSocket(
-      `ws://${config.uiServer.host}:${config.uiServer.port}`,
-      config.uiServer.protocol
+      `${this.configuration.uiServer.secure === true ? ApplicationProtocol.WSS : ApplicationProtocol.WS}://${this.configuration.uiServer.host}:${this.configuration.uiServer.port}`,
+      `${this.configuration.uiServer.protocol}${this.configuration.uiServer.version}`
     )
     this.ws.onmessage = this.responseHandler.bind(this)
     this.ws.onerror = errorEvent => {
@@ -137,7 +138,7 @@ export class UIClient {
         const sendTimeout = setTimeout(() => {
           this.responseHandlers.delete(uuid)
           return reject(new Error(`Send request '${procedureName}' message timeout`))
-        }, 60 * 1000)
+        }, 60000)
         try {
           this.ws.send(msg)
           this.responseHandlers.set(uuid, { procedureName, resolve, reject })

@@ -4,13 +4,19 @@ The Web UI code and configuration is in the repository directory [ui/web](./../.
 
 ## Project setup
 
+### Dependencies
+
 ```shell
 corepack enable
 corepack prepare pnpm@latest --activate
 pnpm install
 ```
 
-The simulator UI server must be enabled, use WebSocket and disable authentication. The simulator main configuration file should have a `uiServer` section like this:
+### Configuration
+
+#### Simulator UI Server Configuration
+
+The simulator UI server must be enabled, use WebSocket transport type and have authentication disabled. The simulator main configuration file should have a `uiServer` section like this:
 
 ```json
   "uiServer": {
@@ -27,37 +33,43 @@ The simulator UI server must be enabled, use WebSocket and disable authenticatio
 
 See [here](./../../README.md#charging-stations-simulator-configuration) for more details.
 
+#### Web UI configuration
+
+Copy the configuration template [src/assets/config-template.json](./src/assets/config-template.json) to `public/config.json`.
+
 ### Run
 
-#### Compiles and run for production
+#### Compiles for production and preview locally
 
 ```shell
-pnpm start
-```
-
-#### Compiles and run for development
-
-```shell
-pnpm serve
+pnpm preview
 ```
 
 #### Try it out
 
-For both options above you can then follow the link displayed in the terminal at the end of compilation. The Web UI looks like the following
+You can now follow the link displayed in the terminal. The Web UI looks like the following:
 
-![webui](./assets/webui.png)
+![webui](./src/assets/webui.png)
 
 1. With the top 2 buttons you can now stop and afterwards start the simulator and inspect the server console for the number of charging stations, e.g. with the default configuration: `Charging stations simulator ... started with 10 charging station(s)`
 2. Each charging station is a row in the table below, try "Stop Charging Station" and refresh with the large blue button and see the status Started turns from Yes into No.
 
-### Compiles and minifies for production
+### Development
+
+#### Compiles and run for development
 
 ```shell
-pnpm build
+pnpm dev
 ```
 
-### Lints files
+#### Formats files
 
 ```shell
-pnpm lint
+pnpm format
+```
+
+#### Lints and fixes files
+
+```shell
+pnpm lint:fix
 ```
