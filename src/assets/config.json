@@ -1,5 +1,5 @@
 {
-  "supervisionUrls": ["ws://localhost:9000"],
+  "supervisionUrls": ["wss://core.grdflo.com/ocpp/1.6/central_system"],
   "supervisionUrlDistribution": "round-robin",
   "log": {
     "file": "logs/combined.log",
@@ -26,11 +26,43 @@
   },
   "stationTemplateUrls": [
     {
+      "file": "virtual-simple.station-template.json",
+      "numberOfStations": 1
+    },
+    {
+      "file": "siemens.station-template.json",
+      "numberOfStations": 1
+    },
+    {
+      "file": "keba.station-template.json",
+      "numberOfStations": 1
+    },
+    {
+      "file": "abb.station-template.json",
+      "numberOfStations": 1
+    },
+    {
+      "file": "evlink.station-template.json",
+      "numberOfStations": 1
+    },
+    {
+      "file": "schneider.station-template.json",
+      "numberOfStations": 1
+    },
+    {
+      "file": "virtual.station-template.json",
+      "numberOfStations": 1
+    },
+    {
+      "file": "chargex.station-template.json",
+      "numberOfStations": 1
+    },
+    {
       "file": "abb-atg.station-template.json",
       "numberOfStations": 1
     },
     {
-      "file": "sample.station-template.json",
+      "file": "schneider-imredd.station-template.json",
       "numberOfStations": 1
     }
   ]
