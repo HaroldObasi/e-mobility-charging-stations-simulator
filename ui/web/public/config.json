@@ -1,6 +1,6 @@
 {
   "uiServer": {
-    "host": "localhost",
+    "host": "35.247.153.27",
     "port": 8080,
     "protocol": "ui",
     "version": "0.0.1",
